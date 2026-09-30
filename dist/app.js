@@ -16,17 +16,79 @@ function button(text, handler, className) { const node = el('button', text, clas
 function saveSettings() { storage.set('ne-settings', settings); }
 $('speed').value = settings.speed === '0.75' ? '0.75' : '1';
 $('speed').onchange = () => { settings.speed = $('speed').value; saveSettings(); };
-function speak(text) {
-  if (!('speechSynthesis' in window)) return notify('이 브라우저는 음성 읽기를 지원하지 않습니다.');
-  window.speechSynthesis.cancel();
-  const speech = new SpeechSynthesisUtterance(text);
-  const voices = window.speechSynthesis.getVoices();
-  speech.voice = voices.find(v => /^en-US$/i.test(v.lang) && v.localService) || voices.find(v => /^en-US$/i.test(v.lang)) || voices.find(v => /^en/i.test(v.lang)) || null;
-  speech.lang = 'en-US'; speech.rate = Number($('speed').value);
-  speech.onerror = (event) => { if (!['interrupted', 'canceled'].includes(event.error)) notify('음성을 재생할 수 없습니다. 기기의 영어 음성 설정과 연결을 확인하세요.'); };
-  window.speechSynthesis.speak(speech);
+let audioGeneration=0;
+let activeUtterance=null;
+function stopAudio() {
+  audioGeneration++;
+  activeUtterance=null;
+  window.speechSynthesis?.cancel();
+  document.querySelectorAll('.audio-current').forEach(n=>n.classList.remove('audio-current'));
+  $('audio-stop').disabled=true;
+  $('audio-status').textContent='재생 정지';
 }
-if ('speechSynthesis' in window) window.speechSynthesis.getVoices();
+function availableVoices(language) {
+  return (window.speechSynthesis?.getVoices()||[]).filter(v=>v.lang.toLowerCase().startsWith(language)).sort((a,b)=>Number(/^en-US$/i.test(b.lang))-Number(/^en-US$/i.test(a.lang))||Number(b.localService)-Number(a.localService));
+}
+function chooseVoice(language,role='a') {
+  const voices=availableVoices(language);
+  const selected=settings['voice-'+(language==='ko'?'ko':role)];
+  return voices.find(v=>v.voiceURI===selected)||voices[role==='b'&&voices.length>1?1:0]||null;
+}
+function refreshVoices() {
+  for(const [id,lang] of [['voice-ko','ko'],['voice-a','en'],['voice-b','en']]){
+    const select=$(id);select.replaceChildren();
+    const automatic=el('option','자동 선택');automatic.value='';select.append(automatic);
+    for(const voice of availableVoices(lang)){const option=el('option',voice.name+' ('+voice.lang+')');option.value=voice.voiceURI;select.append(option);}
+    select.value=settings[id]||'';
+    select.onchange=()=>{settings[id]=select.value;saveSettings();};
+  }
+}
+function speechChunks(text) {
+  const words=text.split(/\s+/);const parts=[];let line='';
+  for(const word of words){if(line.length+word.length>180&&line){parts.push(line);line='';}line+=(line?' ':'')+word;}
+  if(line)parts.push(line);return parts;
+}
+function playSequence(segments,label) {
+  if(!('speechSynthesis' in window))return notify('이 브라우저는 음성 읽기를 지원하지 않습니다.');
+  stopRecognition();stopAudio();
+  const generation=audioGeneration;
+  const queue=segments.flatMap(s=>speechChunks(s.text).map(text=>({...s,text})));
+  let index=0;
+  $('audio-controls').hidden=false;$('audio-stop').disabled=false;
+  function next(){
+    if(generation!==audioGeneration)return;
+    document.querySelectorAll('.audio-current').forEach(n=>n.classList.remove('audio-current'));
+    if(index>=queue.length){activeUtterance=null;$('audio-stop').disabled=true;$('audio-status').textContent=label+' · 재생 완료';return;}
+    const segment=queue[index++];
+    const speech=new SpeechSynthesisUtterance(segment.text);activeUtterance=speech;
+    speech.lang=segment.lang==='ko'?'ko-KR':'en-US';speech.voice=chooseVoice(segment.lang,segment.role);speech.rate=Number($('speed').value);
+    if(segment.readingIndex!==undefined)document.querySelectorAll('.passage')[segment.readingIndex]?.classList.add('audio-current');
+    $('audio-status').textContent=label+' · '+(segment.speaker|| (segment.lang==='ko'?'한국어 설명':'영어'))+' · '+index+' / '+queue.length;
+    speech.onend=next;
+    speech.onerror=event=>{if(generation!==audioGeneration)return;stopAudio();if(!['interrupted','canceled'].includes(event.error))notify('음성을 재생하지 못했습니다. 기기의 한국어·영어 음성 설정을 확인하세요.');};
+    window.speechSynthesis.speak(speech);
+  }
+  next();
+}
+function speak(text){playSequence([{text,lang:'en',role:'a'}],'Listen');}
+function lectureSegments(expression) {
+  const ko=text=>({text,lang:'ko'}),en=text=>({text,lang:'en',role:'a'});
+  const segments=[ko('이번에 배울 표현을 먼저 들어보세요.'),en(expression.expression),ko('한국어로는 '+expression.meaning+'라는 뜻입니다.'),ko('실제 의미를 살펴볼게요. '+expression.explanation.meaning),ko('뉘앙스에서 기억할 점입니다. '+expression.explanation.nuance),ko('이런 상황에서 사용해 보세요. '+expression.explanation.situation),ko('연령대와 격식 수준도 확인해 볼까요? '+expression.explanation.age+' '+expression.explanation.formality),ko('직접 사용할 때의 조언입니다. '+expression.explanation.recommendation)];
+  for(const example of expression.examples)segments.push(ko('예문을 들어보세요.'),en(example.en),ko(example.ko));
+  segments.push(ko('마지막으로 표현을 한 번 더 듣고 따라 말해 보세요.'),en(expression.expression));
+  return segments;
+}
+$('audio-stop').onclick=stopAudio;
+$('lecture-all').onclick=()=>{if(lesson)playSequence(lesson.expressions.flatMap(lectureSegments),'오늘의 표현 5개 강의');};
+$('reading-listen').onclick=()=>{
+  if(!lesson)return;
+  const speakers=[];
+  const segments=lesson.reading.sentences.map((s,readingIndex)=>{const speaker=s.speaker?.trim()||'내레이션';const key=speaker.toLowerCase();if(!speakers.includes(key))speakers.push(key);return {text:s.en,lang:'en',role:speakers.indexOf(key)%2?'b':'a',speaker,readingIndex};});
+  if(speakers.length>1&&availableVoices('en').length<2)notify('영어 음성이 하나뿐이어서 같은 목소리로 읽습니다. 다른 영어 음성을 설치하면 두 목소리를 사용할 수 있습니다.');
+  playSequence(segments,'Natural Reading');
+};
+$('reading-stop').onclick=stopAudio;
+if('speechSynthesis' in window){window.speechSynthesis.addEventListener('voiceschanged',refreshVoices);refreshVoices();}
 function keyFor(expression) { return JSON.stringify([expression.date,expression.id]); }
 function stateFor(expression) { return progressMap.get(keyFor(expression)) || {date:expression.date,expressionId:expression.id,practiceCount:0,favorite:false,completed:false}; }
 let progressWrites=Promise.resolve();
@@ -66,7 +128,7 @@ function renderCards() {
     const badge = el('span', expression.category, `badge ${/Young|Slang/.test(expression.category) ? 'slang' : expression.category === 'Casual' ? 'casual' : ''}`);
     const title = el('h3', expression.expression); title.lang = 'en';
     const actions = el('div', undefined, 'card-actions');
-    actions.append(button('▶ Listen', () => speak(expression.expression)), button('◉ Practice', () => openPractice(expression), 'practice-button'));
+    actions.append(button('▶ Listen', () => speak(expression.expression)), button('◉ Practice', () => openPractice(expression), 'practice-button'),button('▶ 강의 듣기',()=>playSequence(lectureSegments(expression),expression.expression+' 강의'),'lecture-button'));
     const recommendation=el('p',recommendationLabels[expression.recommendation],'recommendation');
     const mini=el('p', '● '.repeat(stateFor(expression).practiceCount)+'○ '.repeat(5-stateFor(expression).practiceCount)+' '+stateFor(expression).practiceCount+' / 5', 'card-progress');
     const completed=button(stateFor(expression).completed?'✓ 학습 완료':'학습 완료로 표시',async()=>{completed.disabled=true;if(await persistProgress(expression,{completed:!stateFor(expression).completed})){completed.textContent=stateFor(expression).completed?'✓ 학습 완료':'학습 완료로 표시';completed.setAttribute('aria-pressed',stateFor(expression).completed);}completed.disabled=false;},'complete-button');
@@ -78,7 +140,7 @@ function renderCards() {
     const labels = { meaning: '실제 의미', nuance: '뉘앙스', situation: '사용 상황', age: '연령대', formality: '격식 수준', recommendation: '직접 사용해도 될까요?' };
     for (const [key, label] of Object.entries(labels)) details.append(el('dt', label), el('dd', expression.explanation[key]));
     details.append(el('dt','사용 성격'),el('dd',expression.usageLevel));explanation.append(details);
-    for(const item of expression.examples){const example=el('blockquote',item.en);example.lang='en';explanation.append(example,el('p',item.ko,'muted'));}
+    for(const item of expression.examples){const example=el('blockquote',item.en);example.lang='en';const exampleListen=button('▶ 예문 듣기',()=>speak(item.en),'example-listen');exampleListen.setAttribute('aria-label','예문 듣기: '+item.en);explanation.append(example,el('p',item.ko,'muted'),exampleListen);}
     const explain = button('Explain ＋', () => { explanation.hidden = !explanation.hidden; explain.setAttribute('aria-expanded', !explanation.hidden); explain.textContent = explanation.hidden ? 'Explain ＋' : 'Explain −'; }, 'explain-button');
     explain.setAttribute('aria-expanded', false); explain.setAttribute('aria-controls', explanation.id);
     card.append(content, explain, explanation); container.append(card);
@@ -134,14 +196,14 @@ function updateProgress() {
   $('manual').disabled = repetitions >= 5 || !!recognition || writeBusy; $('recognize').disabled = !Recognition || repetitions >= 5 || writeBusy;
 }
 function openPractice(expression) {
-  stopRecognition(); window.speechSynthesis?.cancel(); currentExpression = expression; repetitions = stateFor(expression).practiceCount;
+  stopRecognition(); stopAudio(); currentExpression = expression; repetitions = stateFor(expression).practiceCount;
   $('practice-sentence').textContent = expression.practice; $('practice-meaning').textContent = expression.meaning;
   $('transcript').textContent = '말한 내용이 여기에 표시됩니다.';
   $('recognition-note').textContent = Recognition ? '마이크로 한 번 말하면 1회가 기록됩니다. 음성인식은 인터넷이 필요할 수 있으며 음성이 브라우저 제공업체로 전송될 수 있습니다. 인식 결과는 발음 점수가 아닙니다.' : '이 브라우저는 음성인식을 지원하지 않습니다. 소리 내어 읽은 뒤 “한 번 말했어요”를 누르세요.';
   updateProgress(); $('practice').showModal(); $('practice').scrollTop=0;
 }
 $('close-practice').onclick = $('finish-practice').onclick = () => $('practice').close();
-$('practice').addEventListener('close', () => { stopRecognition(); window.speechSynthesis?.cancel(); renderCards(); });
+$('practice').addEventListener('close', () => { stopRecognition(); stopAudio(); renderCards(); });
 $('practice-listen').onclick = () => { stopRecognition(); speak(currentExpression.practice); };
 async function recordPractice(count){
   if(writeBusy)return;const expression=currentExpression;writeBusy=true;updateProgress();$('reset-practice').disabled=true;
@@ -153,7 +215,7 @@ $('reset-practice').onclick = () => { stopRecognition(); recordPractice(0); $('t
 $('recognize').onclick = () => {
   if (recognition) { stopRecognition(); return; }
   if (!Recognition || repetitions >= 5) return;
-  window.speechSynthesis?.cancel();
+  stopAudio();
   const session = new Recognition(); recognition = session;
   session.lang = 'en-US'; session.interimResults = true; session.continuous = false;
   let counted = false;
@@ -200,7 +262,7 @@ function renderNavigation() {
 async function selectLesson(date) {
   const selected=library.find(d=>d.date===date);
   if(!selected){showEmpty();return;}
-  stopRecognition();window.speechSynthesis?.cancel();
+  stopRecognition();stopAudio();
   lesson=normalize(selected);favoritesOnly=false;
   $('date').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'long',day:'numeric'}).format(new Date(date+'T12:00:00'));
   $('lesson-label').textContent=lesson.label;
@@ -208,6 +270,7 @@ async function selectLesson(date) {
   try {await db.setMeta('selectedDate',date);}catch{notify('마지막 선택 날짜를 저장하지 못했습니다.');}
 }
 function showEmpty() {
+  stopAudio();
   lesson=null;favoritesOnly=false;
   $('expressions').replaceChildren(el('p','저장된 교재가 없습니다. “오늘 교재 불러오기”로 JSON 파일을 선택하세요.'));
   $('favorite-empty').hidden=true;$('reading').replaceChildren();$('vocabulary').replaceChildren(el('p','교재를 불러오면 표현을 확인할 수 있어요.'));
