@@ -181,7 +181,7 @@ window.addEventListener('beforeinstallprompt', event => { event.preventDefault()
 $('install').onclick = async () => { if (!installPrompt) return; await installPrompt.prompt(); await installPrompt.userChoice; installPrompt = null; $('install').hidden = true; };
 window.addEventListener('appinstalled', () => { $('install').hidden = true; notify('홈 화면에 Natural English가 설치되었습니다.'); });
 if ('serviceWorker' in navigator && window.isSecureContext) {
-  navigator.serviceWorker.register('./sw.js').then(() => navigator.serviceWorker.ready).then(() => { $('offline-status').textContent = '오프라인 읽기 준비 완료'; }).catch(() => { $('offline-status').textContent = '오프라인 저장 불가'; });
+  navigator.serviceWorker.register('./sw.js', {updateViaCache:'none'}).then(() => navigator.serviceWorker.ready).then(() => { $('offline-status').textContent = '오프라인 읽기 준비 완료'; }).catch(() => { $('offline-status').textContent = '오프라인 저장 불가'; });
 } else { $('offline-status').textContent = 'PWA 설치는 HTTPS 또는 localhost에서 가능'; }
 initialize();
 async function refreshLibrary() {
