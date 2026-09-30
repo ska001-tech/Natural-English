@@ -204,13 +204,23 @@ function lectureSegments(expression) {
 }
 $('audio-stop').onclick=stopAudio;
 $('lecture-all').onclick=()=>{if(lesson)playSequence(lesson.expressions.flatMap(lectureSegments),'오늘의 표현 5개 강의');};
-$('reading-listen').onclick=()=>{
-  if(!lesson)return;
+function readingSegments(){
   const speakers=[];
-  const segments=lesson.reading.sentences.map((s,readingIndex)=>{const speaker=s.speaker?.trim()||'내레이션';const key=speaker.toLowerCase();if(!speakers.includes(key))speakers.push(key);return {text:s.en,lang:'en',role:speakers.indexOf(key)%2?'b':'a',speaker,readingIndex};});
-  if(speakers.length>1&&availableVoices('en').length<2)notify('영어 음성이 하나뿐이어서 같은 목소리로 읽습니다. 다른 영어 음성을 설치하면 두 목소리를 사용할 수 있습니다.');
-  playSequence(segments,'Natural Reading');
-};
+  return (lesson?.reading.sentences||[]).map((s,readingIndex)=>{
+    const speaker=s.speaker?.trim()||'내레이션';const key=speaker.toLowerCase();
+    if(!speakers.includes(key))speakers.push(key);
+    return {text:s.en,lang:'en',role:speakers.indexOf(key)%2?'b':'a',speaker,readingIndex};
+  });
+}
+function listenReading(index,single=false){
+  if(!lesson)return;
+  const all=readingSegments();
+  if(!Number.isInteger(index)||index<0||index>=all.length)return;
+  const segments=single?[all[index]]:all.slice(index);
+  if(new Set(all.map(s=>s.speaker.toLowerCase())).size>1&&availableVoices('en').length<2)notify('영어 음성이 하나뿐이어서 같은 목소리로 읽습니다. 다른 영어 음성을 설치하면 두 목소리를 사용할 수 있습니다.');
+  playSequence(segments,'Natural Reading · '+(index+1)+'번'+(single?' 다시 듣기':'부터 듣기'));
+}
+$('reading-listen').onclick=()=>listenReading(Number($('reading-start').value));
 $('reading-stop').onclick=stopAudio;
 if('speechSynthesis' in window){window.speechSynthesis.addEventListener('voiceschanged',refreshVoices);refreshVoices();}
 function keyFor(expression) { return JSON.stringify([expression.date,expression.id]); }
@@ -292,11 +302,16 @@ function renderReading() {
   const words = lesson.reading.sentences.map(s => s.en).join(' ').split(/\s+/).length;
   $('story-description').textContent = `${lesson.reading.description} · ${words} words`;
   const container = $('reading'); container.replaceChildren();
-  lesson.reading.sentences.forEach(sentence => {
+  $('reading-start').replaceChildren();
+  lesson.reading.sentences.forEach((sentence,index) => {
+    const option=el('option',(index+1)+'번 · '+(sentence.speaker||'내레이션'));option.value=String(index);$('reading-start').append(option);
     const passage = el('div', undefined, 'passage');
     const english = el('p', undefined, 'english'); english.lang = 'en'; highlight(sentence.en, english);
     const korean = el('p', sentence.ko, 'korean'); korean.lang = 'ko'; korean.hidden = !settings.bilingual;
-    passage.append(el('div', sentence.speaker, 'speaker'), english, korean); container.append(passage);
+    const heading=el('div',undefined,'passage-heading');
+    const replay=button('↻ 다시 듣기',()=>listenReading(index,true),'sentence-listen');replay.setAttribute('aria-label',(index+1)+'번 문장 다시 듣기');
+    heading.append(el('div',(index+1)+'. '+(sentence.speaker||'내레이션'),'speaker'),replay);
+    passage.append(heading,english,korean);container.append(passage);
   });
   updateTranslation();
 }
@@ -396,6 +411,7 @@ async function selectLesson(date) {
 function showEmpty() {
   stopAudio();
   lesson=null;favoritesOnly=false;
+  $('reading-start').replaceChildren();
   $('expressions').replaceChildren(el('p','저장된 교재가 없습니다. “오늘 교재 불러오기”로 JSON 파일을 선택하세요.'));
   $('favorite-empty').hidden=true;$('reading').replaceChildren();$('vocabulary').replaceChildren(el('p','교재를 불러오면 표현을 확인할 수 있어요.'));
   $('story-title').textContent='나의 영어 교재';$('story-description').textContent='Settings에서 표준 샘플 파일을 내려받을 수 있습니다.';

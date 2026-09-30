@@ -22,5 +22,13 @@ try{
  await page.evaluate(()=>window.oldSpeech=window.currentSpeech);await page.locator('#reading-stop').click();const before=await page.evaluate(()=>window.calls.length);await page.evaluate(()=>window.oldSpeech.onend());assert.equal(await page.evaluate(()=>window.calls.length),before);assert.equal(await page.locator('.audio-current').count(),0);
  await page.locator('.lecture-button').first().click();await page.locator('.practice-button').first().click();assert.equal(await page.locator('#audio-stop').isDisabled(),true);await page.locator('#close-practice').click();
  await page.evaluate(()=>window.voiceList=window.voiceList.slice(0,2));await page.locator('#reading-listen').click();assert.match(await page.locator('#notice').textContent(),/같은 목소리/);await page.locator('#reading-stop').click();
+ await page.evaluate(()=>{window.voiceList.push({name:'English B',voiceURI:'en-b',lang:'en-US',localService:true});window.calls=[];});
+ assert.equal(await page.locator('.sentence-listen').count(),sample.reading.paragraphs.length);
+ await page.locator('.sentence-listen').nth(1).click();assert.equal(await page.evaluate(()=>window.calls.at(-1).voice),'en-b');assert.equal(await page.evaluate(()=>window.calls.at(-1).text),sample.reading.paragraphs[1].en);
+ await page.evaluate(()=>window.finish());assert.equal(await page.evaluate(()=>window.calls.length),1);assert.equal(await page.locator('#audio-stop').isDisabled(),true);
+ await page.locator('#reading-start').selectOption('1');await page.evaluate(()=>window.calls=[]);await page.locator('#reading-listen').click();await page.evaluate(()=>{for(let i=0;i<1000&&window.currentSpeech;i++)window.finish();});
+ const resumed=await page.evaluate(()=>window.calls);assert.equal(resumed[0].voice,'en-b');assert.equal(resumed[0].text,sample.reading.paragraphs[1].en);assert.equal(resumed.at(-1).text,sample.reading.paragraphs.at(-1).en);assert.equal(resumed.length,sample.reading.paragraphs.length-1);
+ await page.locator('#reading-start').selectOption(String(sample.reading.paragraphs.length-1));await page.evaluate(()=>window.calls=[]);await page.locator('#reading-listen').click();await page.evaluate(()=>window.finish());assert.equal(await page.evaluate(()=>window.calls.length),1);
+ console.log('PASS: per-sentence replay stops after one sentence; selected start preserves speaker roles and reads to the end; final sentence works.');
  assert.deepEqual(errors,[]);console.log('PASS: 5 lectures bilingual queue, English examples, two speaker voices, slow rate, highlighting, stop cancels queue, Practice interrupts, single-voice fallback. Audio is mocked; real device playback remains device-dependent.');
 }finally{await browser.close();}
