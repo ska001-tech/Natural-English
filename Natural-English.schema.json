@@ -1,0 +1,285 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Natural English daily lesson v1",
+  "type": "object",
+  "required": [
+    "date",
+    "title",
+    "expressions",
+    "reading",
+    "vocabulary"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "expressions": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": [
+          "expression",
+          "meaningKo",
+          "category",
+          "usageLevel",
+          "explanationKo",
+          "nuanceKo",
+          "whenToUseKo",
+          "ageGroup",
+          "formality",
+          "recommendation",
+          "examples"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "expression": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "meaningKo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "category": {
+            "enum": [
+              "general",
+              "casual",
+              "idiom",
+              "phrasal-verb",
+              "young-generation",
+              "slang",
+              "sns"
+            ]
+          },
+          "usageLevel": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "explanationKo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "nuanceKo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "whenToUseKo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "ageGroup": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "formality": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "recommendation": {
+            "enum": [
+              "actively-use",
+              "casual-use",
+              "understand-only"
+            ]
+          },
+          "recommendationKo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "practiceSentence": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "examples": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10,
+            "items": {
+              "type": "object",
+              "required": [
+                "en",
+                "ko"
+              ],
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 12000
+                },
+                "ko": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 12000
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "reading": {
+      "type": "object",
+      "required": [
+        "title",
+        "introductionKo",
+        "paragraphs"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 12000
+        },
+        "introductionKo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 12000
+        },
+        "paragraphs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "required": [
+              "en",
+              "ko"
+            ],
+            "properties": {
+              "en": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 12000
+              },
+              "ko": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 12000
+              },
+              "speaker": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              }
+            }
+          }
+        }
+      }
+    },
+    "vocabulary": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [
+          "pronunciation",
+          "meaningKo",
+          "contextualMeaningKo",
+          "example",
+          "exampleKo"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "word": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "phrase": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "pronunciation": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "meaningKo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "contextualMeaningKo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "example": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "exampleKo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12000
+          },
+          "matches": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 20,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          }
+        },
+        "oneOf": [
+          {
+            "required": [
+              "word"
+            ],
+            "not": {
+              "required": [
+                "phrase"
+              ]
+            }
+          },
+          {
+            "required": [
+              "phrase"
+            ],
+            "not": {
+              "required": [
+                "word"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

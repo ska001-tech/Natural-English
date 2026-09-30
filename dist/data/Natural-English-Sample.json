@@ -1,0 +1,325 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-13",
+  "title": "Lunch can wait · 바쁜 동료와 자연스럽게 대화하기",
+  "expressions": [
+    {
+      "id": "play-it-by-ear",
+      "expression": "Play it by ear",
+      "meaningKo": "상황을 봐서 정하다",
+      "category": "idiom",
+      "usageLevel": "성인 일상·업무 대화",
+      "explanationKo": "미리 확정하지 않고 그때 상황에 맞춰 결정한다는 뜻입니다.",
+      "nuanceKo": "무계획이라기보다 유연하게 대응하자는 가벼운 제안입니다.",
+      "whenToUseKo": "주말 일정, 식사 장소, 아직 확정하기 어려운 계획.",
+      "ageGroup": "성인 전 연령대에서 자연스럽습니다.",
+      "formality": "일상 및 편안한 업무 대화. 확정된 답이 필요한 공식 자리에서는 주의.",
+      "recommendation": "actively-use",
+      "recommendationKo": "적극 사용 추천. 50대 성인이 써도 자연스럽습니다.",
+      "practiceSentence": "Let's play it by ear and see how we feel.",
+      "examples": [
+        {
+          "en": "We don't need to book anything yet. Let's play it by ear.",
+          "ko": "아직 예약할 필요 없어. 상황을 봐서 정하자."
+        }
+      ]
+    },
+    {
+      "id": "talk-through",
+      "expression": "Talk through",
+      "meaningKo": "차근차근 이야기하며 검토하다",
+      "category": "phrasal-verb",
+      "usageLevel": "업무·일상에서 적극 사용",
+      "explanationKo": "어떤 문제나 계획의 세부 내용을 순서대로 이야기하며 검토한다는 뜻입니다.",
+      "nuanceKo": "그냥 언급하는 것보다 함께 이해하고 해결하는 과정에 초점이 있습니다.",
+      "whenToUseKo": "동료와 보고서를 검토하거나 친구와 선택지를 정리할 때.",
+      "ageGroup": "성인 전 연령대. 50대 성인도 자연스럽습니다.",
+      "formality": "일상 및 일반적인 업무 대화.",
+      "recommendation": "actively-use",
+      "recommendationKo": "상대에게 설명을 요청하거나 함께 검토할 때 사용하세요.",
+      "practiceSentence": "Do you have a minute to talk through the report?",
+      "examples": [
+        {
+          "en": "Can we talk through the plan before we get started?",
+          "ko": "시작하기 전에 계획을 차근차근 검토해 볼 수 있을까요?"
+        }
+      ]
+    },
+    {
+      "id": "a-lot-on-my-plate",
+      "expression": "A lot on my plate",
+      "meaningKo": "해야 할 일이 많은",
+      "category": "idiom",
+      "usageLevel": "성인 일상·업무 대화",
+      "explanationKo": "현재 감당해야 할 일이나 책임이 많다는 뜻입니다.",
+      "nuanceKo": "단순히 시간이 없다는 말보다 업무와 개인적인 부담까지 포함합니다.",
+      "whenToUseKo": "추가 부탁을 정중히 거절하거나 현재 업무량을 설명할 때.",
+      "ageGroup": "성인 전 연령대에서 자연스럽습니다.",
+      "formality": "편안한 업무 대화 및 일상. 속어나 유행어가 아닙니다.",
+      "recommendation": "actively-use",
+      "recommendationKo": "적극 사용 추천. 거절할 때 대안이나 가능한 시점을 덧붙이면 좋습니다.",
+      "practiceSentence": "I've got a lot on my plate this week.",
+      "examples": [
+        {
+          "en": "I'd love to help, but I've got a lot on my plate right now.",
+          "ko": "돕고 싶지만 지금은 해야 할 일이 많아."
+        }
+      ]
+    },
+    {
+      "id": "rain-check",
+      "expression": "Take a rain check",
+      "meaningKo": "다음을 기약하다",
+      "category": "casual",
+      "usageLevel": "성인 일상·업무 대화",
+      "explanationKo": "제안을 지금은 받아들이기 어렵지만 다음에 함께하고 싶다는 뜻입니다.",
+      "nuanceKo": "단순 거절보다 따뜻합니다. 실제로 다시 만날 의향이 있을 때 잘 맞습니다.",
+      "whenToUseKo": "점심, 커피, 모임 초대를 미루고 싶을 때.",
+      "ageGroup": "성인 전 연령대. 50대 성인도 자연스럽게 사용합니다.",
+      "formality": "Casual. 친구나 편한 동료에게 적합하며 공식 일정 변경에는 구체적으로 설명하세요.",
+      "recommendation": "casual-use",
+      "recommendationKo": "직접 사용해도 자연스럽습니다. 다른 날짜를 제안하면 더 진심이 전해집니다.",
+      "practiceSentence": "Can I take a rain check on lunch?",
+      "examples": [
+        {
+          "en": "I'm tied up tonight. Can I take a rain check?",
+          "ko": "오늘 저녁에는 시간이 안 돼. 다음에 해도 될까?"
+        }
+      ]
+    },
+    {
+      "id": "low-key",
+      "expression": "Low-key excited",
+      "meaningKo": "은근히 기대되는",
+      "category": "young-generation",
+      "usageLevel": "젊은 층 구어 / SNS · 이해 중심",
+      "explanationKo": "크게 티 내지는 않지만 은근히 기대된다는 뜻입니다.",
+      "nuanceKo": "여기서 low-key는 excited를 꾸미는 구어적 부사입니다. 조용한 분위기를 뜻하는 a low-key evening과는 용법이 다릅니다.",
+      "whenToUseKo": "친구끼리 기대감을 가볍게 털어놓거나 SNS에 쓸 때.",
+      "ageGroup": "이 부사 용법은 특히 젊은 층의 구어·SNS에서 자주 보입니다. 나이만으로 사용을 단정할 수는 없습니다.",
+      "formality": "Slang / SNS. 격식 있는 업무 상황에는 피하는 편이 좋습니다.",
+      "recommendation": "understand-only",
+      "recommendationKo": "50대 학습자는 알아듣는 정도면 충분. 평소 말투에 맞지 않으면 I'm actually pretty excited.가 더 편안합니다.",
+      "practiceSentence": "I'm low-key excited about that new sandwich place.",
+      "examples": [
+        {
+          "en": "I'm low-key excited to have the whole weekend to myself.",
+          "ko": "주말 내내 혼자 시간을 보낼 생각에 은근히 기대돼."
+        }
+      ]
+    }
+  ],
+  "reading": {
+    "title": "Lunch can wait",
+    "introductionKo": "바쁜 금요일, 동료 Maya와 Ben이 점심 계획을 조율합니다.",
+    "paragraphs": [
+      {
+        "speaker": "MAYA",
+        "en": "Hey, are you still up for lunch, or has your morning turned into one of those mornings?",
+        "ko": "오늘 점심 같이 먹을 생각 아직 있어? 아니면 아침부터 일이 꼬이고 있어?"
+      },
+      {
+        "speaker": "BEN",
+        "en": "Honestly, I've got a lot on my plate today, and I haven't even opened the report we need to review before Monday.",
+        "ko": "솔직히 오늘 할 일이 너무 많아서 월요일 전에 검토해야 하는 보고서는 열어 보지도 못했어."
+      },
+      {
+        "speaker": "MAYA",
+        "en": "No pressure at all; I was just going to grab something from that new sandwich place around the corner.",
+        "ko": "전혀 부담 갖지 마. 그냥 모퉁이에 새로 생긴 샌드위치 가게에서 뭐 좀 사 먹으려고 했어."
+      },
+      {
+        "speaker": "BEN",
+        "en": "I'm low-key excited about that place, but can I take a rain check on lunch and aim for Tuesday instead?",
+        "ko": "그 가게 은근히 기대되는데, 점심은 다음으로 미루고 화요일쯤 같이 먹을까?"
+      },
+      {
+        "speaker": "MAYA",
+        "en": "Tuesday works for me, although let's play it by ear because my afternoon meeting might get moved to the morning.",
+        "ko": "난 화요일 괜찮아. 다만 오후 회의가 오전으로 바뀔 수도 있으니까 상황을 보고 정하자."
+      },
+      {
+        "speaker": "BEN",
+        "en": "Sounds good, and thanks for being flexible about it.",
+        "ko": "좋아. 일정 맞춰 줘서 고마워."
+      },
+      {
+        "speaker": "MAYA",
+        "en": "Before I head out, do you have a minute to talk through the report so we're on the same page?",
+        "ko": "나 나가기 전에, 보고서에 대해 서로 같은 생각인지 잠깐 이야기해 볼 시간 있어?"
+      },
+      {
+        "speaker": "BEN",
+        "en": "Absolutely, because I thought we were putting together a quick summary, not rewriting the whole thing from scratch.",
+        "ko": "그럼. 난 전체를 처음부터 다시 쓰는 게 아니라 간단히 요약하는 걸로 알고 있었거든."
+      },
+      {
+        "speaker": "MAYA",
+        "en": "That's my understanding too, so let's focus on the customer feedback and leave the background section alone for now.",
+        "ko": "나도 그렇게 이해했어. 그러니까 고객 의견에 집중하고 배경 설명 부분은 일단 그대로 두자."
+      },
+      {
+        "speaker": "BEN",
+        "en": "Perfect, that takes some of the pressure off, and I can send you a rough draft by three.",
+        "ko": "좋아. 그러면 부담이 좀 줄겠네. 세 시까지 초안 보내 줄 수 있어."
+      },
+      {
+        "speaker": "MAYA",
+        "en": "Three is fine, and it doesn't have to be polished; I just need enough detail to spot anything we've missed.",
+        "ko": "세 시면 괜찮아. 완벽하게 다듬을 필요는 없고, 빠뜨린 게 있는지 확인할 만큼만 자세하면 돼."
+      },
+      {
+        "speaker": "BEN",
+        "en": "Great, I'll flag the numbers I'm unsure about rather than spend an hour trying to track down every last detail.",
+        "ko": "좋아. 세부 사항을 하나하나 찾느라 한 시간 쓰기보다는 확실하지 않은 수치에 표시해 둘게."
+      },
+      {
+        "speaker": "MAYA",
+        "en": "Good call, and if you get stuck, just send me a message instead of sitting there wrestling with it.",
+        "ko": "좋은 생각이야. 막히면 혼자 붙잡고 씨름하지 말고 그냥 나한테 메시지 보내."
+      },
+      {
+        "speaker": "BEN",
+        "en": "Will do, and actually, if you're heading out anyway, would you mind grabbing me a coffee on your way back?",
+        "ko": "그럴게. 아, 어차피 나가는 거면 돌아오는 길에 커피 하나만 사다 줄 수 있어?"
+      },
+      {
+        "speaker": "MAYA",
+        "en": "Of course, your usual, and maybe a cookie if they have the chocolate ones you like?",
+        "ko": "물론이지. 늘 마시는 걸로, 그리고 네가 좋아하는 초콜릿 쿠키가 있으면 그것도 하나?"
+      },
+      {
+        "speaker": "BEN",
+        "en": "You're the best, and next Tuesday, lunch is on me.",
+        "ko": "역시 너밖에 없다. 다음 화요일 점심은 내가 살게."
+      },
+      {
+        "speaker": "MAYA",
+        "en": "Deal, now go tackle that draft while I see what the sandwich situation looks like.",
+        "ko": "좋아. 그럼 내가 샌드위치 가게 좀 보고 올 동안 초안부터 해치워."
+      }
+    ]
+  },
+  "vocabulary": [
+    {
+      "id": "plate",
+      "phrase": "a lot on my plate",
+      "pronunciation": "/ə lɑt ɑn maɪ pleɪt/",
+      "meaningKo": "해야 할 일이나 책임이 많은 상태",
+      "contextualMeaningKo": "Ben이 보고서를 시작하지 못할 만큼 여러 일로 바쁘다는 뜻입니다.",
+      "example": "With the move and the new job, I've got a lot on my plate.",
+      "exampleKo": "이사에 새 직장까지, 해야 할 일이 많아.",
+      "matches": [
+        "a lot on my plate"
+      ]
+    },
+    {
+      "id": "rain",
+      "phrase": "take a rain check",
+      "pronunciation": "/teɪk ə reɪn tʃɛk/",
+      "meaningKo": "지금은 어렵지만 다음을 기약하다",
+      "contextualMeaningKo": "Ben이 점심을 거절하면서 화요일에 다시 만나자고 제안합니다.",
+      "example": "Can I take a rain check on dinner? How about Friday?",
+      "exampleKo": "저녁은 다음으로 미뤄도 될까? 금요일은 어때?",
+      "matches": [
+        "take a rain check"
+      ]
+    },
+    {
+      "id": "ear",
+      "phrase": "play it by ear",
+      "pronunciation": "/pleɪ ɪt baɪ ɪr/",
+      "meaningKo": "상황을 봐서 결정하다",
+      "contextualMeaningKo": "회의 시간이 바뀔 수 있어 점심 계획을 유연하게 잡자는 뜻입니다.",
+      "example": "We might go for a walk after dinner. Let's play it by ear.",
+      "exampleKo": "저녁 먹고 산책할 수도 있어. 상황 보고 정하자.",
+      "matches": [
+        "play it by ear"
+      ]
+    },
+    {
+      "id": "page",
+      "phrase": "on the same page",
+      "pronunciation": "/ɑn ðə seɪm peɪdʒ/",
+      "meaningKo": "같은 내용을 이해하고 있는",
+      "contextualMeaningKo": "보고서 작업 범위를 서로 똑같이 이해하는지 확인합니다.",
+      "example": "Are we on the same page about the deadline?",
+      "exampleKo": "마감일에 대해 서로 같은 생각인 거지?",
+      "matches": [
+        "on the same page"
+      ]
+    },
+    {
+      "id": "low",
+      "phrase": "low-key excited",
+      "pronunciation": "/ˌloʊ ki ɪkˈsaɪtɪd/",
+      "meaningKo": "은근히 기대되는",
+      "contextualMeaningKo": "새 샌드위치 가게에 대한 기대를 가볍게 말합니다. Young generation · Slang / SNS. 알아듣는 정도면 충분.",
+      "example": "I'm low-key excited about our little road trip.",
+      "exampleKo": "우리 짧은 자동차 여행이 은근히 기대돼.",
+      "matches": [
+        "low-key excited"
+      ]
+    },
+    {
+      "id": "scratch",
+      "phrase": "from scratch",
+      "pronunciation": "/frəm skrætʃ/",
+      "meaningKo": "처음부터, 아무것도 없는 상태에서",
+      "contextualMeaningKo": "기존 보고서를 고치는 대신 전체를 새로 쓰는 작업을 말합니다.",
+      "example": "We don't have to build the whole system from scratch.",
+      "exampleKo": "전체 시스템을 처음부터 만들 필요는 없어.",
+      "matches": [
+        "from scratch"
+      ]
+    },
+    {
+      "id": "draft",
+      "phrase": "rough draft",
+      "pronunciation": "/rʌf dræft/",
+      "meaningKo": "아직 다듬지 않은 초안",
+      "contextualMeaningKo": "완성된 문서가 아니라 빠진 내용을 점검할 수 있는 초안을 뜻합니다.",
+      "example": "I'll share a rough draft so you can see the direction.",
+      "exampleKo": "어떤 방향인지 볼 수 있게 초안을 공유할게.",
+      "matches": [
+        "rough draft"
+      ]
+    },
+    {
+      "id": "call",
+      "phrase": "good call",
+      "pronunciation": "/ɡʊd kɔl/",
+      "meaningKo": "좋은 판단이야",
+      "contextualMeaningKo": "불확실한 숫자에 표시하고 넘어가자는 Ben의 판단에 동의합니다.",
+      "example": "You brought an umbrella? Good call.",
+      "exampleKo": "우산 가져왔어? 좋은 판단이야.",
+      "matches": [
+        "Good call"
+      ]
+    },
+    {
+      "id": "me",
+      "phrase": "on me",
+      "pronunciation": "/ɑn mi/",
+      "meaningKo": "내가 낼게, 내 부담으로",
+      "contextualMeaningKo": "Ben이 고마움의 표시로 다음 점심값을 내겠다는 뜻입니다.",
+      "example": "Let's grab a coffee. It's on me.",
+      "exampleKo": "커피 한잔하자. 내가 살게.",
+      "matches": [
+        "on me"
+      ]
+    },
+    {
+      "id": "talk-through",
+      "phrase": "talk through",
+      "pronunciation": "/tɔk θru/",
+      "meaningKo": "차근차근 이야기하며 검토하다",
+      "contextualMeaningKo": "Maya가 보고서의 작업 범위를 함께 이야기해서 정리하자고 제안합니다.",
+      "example": "Let me talk you through the next steps.",
+      "exampleKo": "다음 단계를 차근차근 설명해 드릴게요.",
+      "matches": [
+        "talk through"
+      ]
+    }
+  ]
+}

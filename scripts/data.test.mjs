@@ -1,0 +1,23 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {validateLesson,parseImport,validateBackup,normalize} from '../dist/data-model.js';
+const sample=JSON.parse(fs.readFileSync('Natural-English-Sample.json','utf8'));
+const valid=validateLesson(sample);
+assert.equal(valid.expressions.length,5);
+assert.deepEqual(new Set(valid.expressions.map(e=>e.category)),new Set(['idiom','phrasal-verb','casual','young-generation']));
+const words=valid.reading.paragraphs.map(p=>p.en).join(' ').split(/\s+/).length;assert.ok(words>=300&&words<=400);
+assert.equal(normalize(valid).reading.sentences.length,17);
+assert.equal(parseImport('\ufeff'+JSON.stringify(sample)).type,'lesson');
+const invalid=[{...sample,date:'2026-02-30'},{...sample,date:'13/09/2026'},{...sample,expressions:sample.expressions.slice(1)},{...sample,vocabulary:[]},null];
+for(const input of invalid)assert.throws(()=>validateLesson(input));
+assert.throws(()=>parseImport('{broken'));
+for(const field of ['meaningKo','explanationKo','examples','category','recommendation']){const d=structuredClone(sample);delete d.expressions[0][field];assert.throws(()=>validateLesson(d));}
+const duplicate=structuredClone(sample);duplicate.expressions[1].id=duplicate.expressions[0].id;assert.throws(()=>validateLesson(duplicate));
+const noId=structuredClone(sample);delete noId.expressions[0].id;assert.ok(validateLesson(noId).expressions[0].id);
+const backup={type:'natural-english-backup',version:1,lessons:[sample],progress:[{date:sample.date,expressionId:sample.expressions[0].id,practiceCount:3,favorite:true,completed:false}]};
+assert.equal(validateBackup(backup).progress[0].practiceCount,3);
+assert.throws(()=>validateBackup({...backup,progress:[{...backup.progress[0],practiceCount:6}]}));
+assert.throws(()=>validateBackup({...backup,progress:[{...backup.progress[0],expressionId:'unknown'}]}));
+assert.throws(()=>validateBackup({...backup,lessons:[sample,sample]}));
+assert.equal(fs.readFileSync('Natural-English-Sample.json','utf8'),fs.readFileSync('dist/data/Natural-English-Sample.json','utf8'));
+console.log(`Standard format OK: ${words} words, invalid inputs rejected, backup validation passed`);

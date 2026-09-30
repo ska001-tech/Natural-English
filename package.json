@@ -1,0 +1,15 @@
+{
+  "name": "natural-english",
+  "version": "2.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node scripts/build.mjs && node --check dist/app.bundle.js && node --check dist/app.js && node --check dist/data-model.js && node --check dist/library-db.js && node --check dist/sw.js && node scripts/check.mjs && node scripts/data.test.mjs",
+    "test:browser": "node scripts/browser.test.mjs",
+    "build": "node scripts/build.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

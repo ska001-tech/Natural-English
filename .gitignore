@@ -1,0 +1,7 @@
+node_modules/
+test-results/
+/Natural-English-20*.json
+/Natural-English-Backup-*.json
+.env
+.env.*
+!.env.example
