@@ -66,7 +66,9 @@
               "phrasal-verb",
               "young-generation",
               "slang",
-              "sns"
+              "sns",
+              "natural-chunk",
+              "collocation"
             ]
           },
           "usageLevel": {

@@ -1,4 +1,4 @@
-const CACHE = 'natural-english-v4';
+const CACHE = 'natural-english-v5';
 const ASSETS = ['./', './index.html', './styles.css', './app.js', './app.bundle.js', './data-model.js', './library-db.js', './manifest.webmanifest', './icons/icon.svg', './icons/icon-192.png', './icons/icon-512.png', './data/index.json', './data/day-001.json', './data/starter.json', './data/Natural-English-Sample.json'];
 self.addEventListener('install', event => { event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS))); });
 self.addEventListener('activate', event => { event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('natural-english-') && key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim())); });

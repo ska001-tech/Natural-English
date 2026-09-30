@@ -21,3 +21,12 @@ assert.throws(()=>validateBackup({...backup,progress:[{...backup.progress[0],exp
 assert.throws(()=>validateBackup({...backup,lessons:[sample,sample]}));
 assert.equal(fs.readFileSync('Natural-English-Sample.json','utf8'),fs.readFileSync('dist/data/Natural-English-Sample.json','utf8'));
 console.log(`Standard format OK: ${words} words, invalid inputs rejected, backup validation passed`);
+for(const [input,expected] of [['natural chunk','natural-chunk'],['Natural Chunk','natural-chunk'],['natural_chunk','natural-chunk'],['collocation','collocation'],[' Phrasal Verb ','phrasal-verb'],['Slang / SNS','slang']]){
+ const material=structuredClone(sample);material.expressions[2].category=input;
+ const imported=parseImport(JSON.stringify(material)).lesson;
+ assert.equal(imported.expressions[2].category,expected);
+ assert.ok(normalize(imported).expressions[2].category);
+ assert.equal(parseImport(JSON.stringify(imported)).lesson.expressions[2].category,expected);
+}
+const badCategory=structuredClone(sample);badCategory.expressions[2].category='unknown-type';assert.throws(()=>validateLesson(badCategory),/3번째 표현/);
+console.log('Category normalization and round-trip passed');

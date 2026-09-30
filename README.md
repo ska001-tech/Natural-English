@@ -72,7 +72,7 @@ IndexedDB는 재실행 후 유지되는 저장소입니다. 앱은 Import 시 �
 | `id` | 선택 | 날짜 안에서 고유한 안정적 ID. 생략하면 영어 표현을 소문자·공백 정규화하여 생성. 명시 권장 |
 | `expression` | 필수 | 영어 표현 |
 | `meaningKo` | 필수 | 간단한 한국어 의미 |
-| `category` | 필수 | `general`, `casual`, `idiom`, `phrasal-verb`, `young-generation`, `slang`, `sns` 중 하나 |
+| `category` | 필수 | `general`, `casual`, `idiom`, `phrasal-verb`, `young-generation`, `slang`, `sns`, `natural-chunk`, `collocation` 중 하나 |
 | `usageLevel` | 필수 | 사용 성격 설명. 예: `성인 일상·업무 대화`, `젊은 층 구어 / SNS · 이해 중심` |
 | `explanationKo` | 필수 | 실제 의미 설명 |
 | `nuanceKo` | 필수 | 뉘앙스와 주의할 차이 |
@@ -204,7 +204,7 @@ npm run test:browser
 
 ## PWA 업데이트
 
-정적 파일을 변경한 배포에는 `sw.js`의 `CACHE` 버전을 올립니다. 현재 `natural-english-v4`입니다. 새 버전을 내려받은 뒤 기존 앱 탭과 설치 앱을 모두 닫고 다시 열면 적용됩니다. 새 Service Worker는 이전 버전의 앱 캐시만 정리하며 IndexedDB 교재는 삭제하지 않습니다. 새로운 파일도 `ASSETS` 목록에 넣으세요. Import한 교재는 Service Worker 캐시와 별개로 IndexedDB에 저장됩니다.
+정적 파일을 변경한 배포에는 `sw.js`의 `CACHE` 버전을 올립니다. 현재 `natural-english-v5`입니다. 새 버전을 내려받은 뒤 기존 앱 탭과 설치 앱을 모두 닫고 다시 열면 적용됩니다. 새 Service Worker는 이전 버전의 앱 캐시만 정리하며 IndexedDB 교재는 삭제하지 않습니다. 새로운 파일도 `ASSETS` 목록에 넣으세요. Import한 교재는 Service Worker 캐시와 별개로 IndexedDB에 저장됩니다.
 
 ## 제한사항
 
@@ -223,3 +223,5 @@ npm run test:browser
 
 연습창은 오른쪽 위의 **× 닫기** 또는 하단 **연습 마치고 돌아가기**로 언제든 종료할 수 있습니다. × 닫기는 스크롤해도 상단에 유지됩니다. 닫으면 음성과 마이크가 멈추며 이미 저장한 반복 횟수는 유지됩니다. PC에서는 Esc도 사용할 수 있습니다. 5회 후 자동으로 닫히지는 않습니다.
 
+
+Import는 `natural chunk`, `Natural Chunk`, `natural_chunk`를 `natural-chunk`로 정규화합니다. `phrasal verb` 등 분류의 공백·밑줄·대소문자 차이도 허용하며, 모르는 분류는 오류로 안내합니다. Export에서는 표준 하이픈 표기를 사용합니다.

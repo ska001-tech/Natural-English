@@ -1,11 +1,19 @@
 // Standard lesson format, version 1. No runtime dependencies.
-export const CATEGORIES = ['general','casual','idiom','phrasal-verb','young-generation','slang','sns'];
+export const CATEGORIES = ['general','casual','idiom','phrasal-verb','young-generation','slang','sns','natural-chunk','collocation'];
 export const RECOMMENDATIONS = ['actively-use','casual-use','understand-only'];
 const fail = (path, message) => { throw new Error(`${path}: ${message}`); };
 const object = (v,p) => { if (!v || typeof v !== 'object' || Array.isArray(v)) fail(p,'객체가 필요합니다.'); return v; };
 const string = (v,p,max=12000) => { if (typeof v !== 'string' || !v.trim() || v.length>max) fail(p,`비어 있지 않은 문자열(최대 ${max}자)이 필요합니다.`); return v.trim(); };
 const array = (v,p,min,max) => { if (!Array.isArray(v) || v.length<min || v.length>max) fail(p,`${min}~${max}개 항목이 필요합니다.`); return v; };
 const enumeration = (v,p,values) => { if (!values.includes(v)) fail(p,`허용 값: ${values.join(', ')}`); return v; };
+function category(value,path) {
+  const raw=string(value,path,100);
+  const key=raw.toLowerCase().replace(/[\s_]+/g,'-');
+  const aliases={'phrasal-verbs':'phrasal-verb','natural-chunks':'natural-chunk','collocations':'collocation','slang-/-sns':'slang'};
+  const result=aliases[key]||key;
+  if(!CATEGORIES.includes(result)) fail(path,'지원하지 않는 분류 "'+raw+'"입니다. 허용 값: '+CATEGORIES.join(', '));
+  return result;
+}
 export function validDate(v) { return typeof v==='string' && /^\d{4}-\d{2}-\d{2}$/.test(v) && Number(v.slice(0,4))>=1900 && !Number.isNaN(Date.parse(v)) && new Date(v+'T00:00:00Z').toISOString().slice(0,10)===v; }
 const identity = text => text.trim().toLowerCase().replace(/\s+/g,' ');
 export function validateLesson(input) {
@@ -17,7 +25,7 @@ export function validateLesson(input) {
     const result={};
     for(const key of ['expression','meaningKo','usageLevel','explanationKo','nuanceKo','whenToUseKo','ageGroup','formality']) result[key]=string(item[key],`${p}.${key}`);
     result.id=item.id===undefined?identity(result.expression):string(item.id,`${p}.id`,200);
-    result.category=enumeration(item.category,`${p}.category`,CATEGORIES);
+    result.category=category(item.category,`${i+1}번째 표현 (${item.expression})의 category`);
     result.recommendation=enumeration(item.recommendation,`${p}.recommendation`,RECOMMENDATIONS);
     if(item.recommendationKo!==undefined) result.recommendationKo=string(item.recommendationKo,`${p}.recommendationKo`);
     if(item.practiceSentence!==undefined) result.practiceSentence=string(item.practiceSentence,`${p}.practiceSentence`);
@@ -47,7 +55,7 @@ export function validateLesson(input) {
   return {schemaVersion:1,date:d.date,title:string(d.title,'title',300),expressions,reading,vocabulary};
 }
 export const recommendationLabels={'actively-use':'적극 사용 추천','casual-use':'편한 대화에서 사용','understand-only':'알아듣는 정도면 충분'};
-export const categoryLabels={general:'General',casual:'Casual',idiom:'Idiom','phrasal-verb':'Phrasal verb','young-generation':'Young generation',slang:'Slang / SNS',sns:'Slang / SNS'};
+export const categoryLabels={'natural-chunk':'Natural chunk',collocation:'Collocation',general:'General',casual:'Casual',idiom:'Idiom','phrasal-verb':'Phrasal verb','young-generation':'Young generation',slang:'Slang / SNS',sns:'Slang / SNS'};
 export function normalize(d) {
   return {date:d.date,id:d.date,label:d.title,source:d,expressions:d.expressions.map(e=>({id:e.id,date:d.date,expression:e.expression,meaning:e.meaningKo,category:categoryLabels[e.category],recommendation:e.recommendation,usageLevel:e.usageLevel,practice:e.practiceSentence||e.examples[0].en,explanation:{meaning:e.explanationKo,nuance:e.nuanceKo,situation:e.whenToUseKo,age:e.ageGroup,formality:e.formality,recommendation:[recommendationLabels[e.recommendation],e.recommendationKo].filter(Boolean).join(' · ')},examples:e.examples,example:e.examples[0].en})),reading:{title:d.reading.title,description:d.reading.introductionKo,sentences:d.reading.paragraphs},vocabulary:d.vocabulary.map(v=>({id:v.id,term:v.word||v.phrase,pronunciation:v.pronunciation,meaning:v.meaningKo,context:v.contextualMeaningKo,example:v.example,exampleKo:v.exampleKo,matches:v.matches}))};
 }
